@@ -1,5 +1,7 @@
 import Conversation from '../models/conversation.model.js';
 import Message from '../models/message.model.js';
+import { getReceiverSocketId , io} from '../socket/socket.js';
+
 
 export const sendMessage = async (req, res) => {
     try {
@@ -38,6 +40,14 @@ export const sendMessage = async (req, res) => {
 
         //save to the db in parallel to save time
         await Promise.all([converston.save(), newMessage.save()]);
+
+        //socket io
+        const receiverSocketId = getReceiverSocketId(receiverId);
+
+        if (receiverSocketId) {
+            //notify the specific client
+            io.to(receiverSocketId).emit("newMessage", newMessage)
+        }
 
         //success response
         res.status(201).json(newMessage);

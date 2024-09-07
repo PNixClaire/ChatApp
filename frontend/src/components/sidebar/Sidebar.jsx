@@ -7,8 +7,7 @@ function Sidebar() {
     <div className="border-r border-amaranthPink p-4 flex flex-col">
       <SearchInput />
       <div className="divider px-3"></div>
-      <Conversations />
-      <Conversations />
+        <Conversations/>
       <LogoutButton/>
     </div>
   );
